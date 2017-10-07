@@ -29,3 +29,7 @@ setup-docker-force: setup-ansible
 	ansible-galaxy install -r requirements.yml
 	sudo ansible-playbook -i hosts setup-docker.yml
 	sudo usermod -a -G docker ${USER}
+
+setup-packer: setup-ansible
+	ansible-galaxy install -r requirements.yml
+	sudo ansible-playbook -i hosts setup-packer.yml

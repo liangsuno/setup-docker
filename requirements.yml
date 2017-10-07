@@ -1,2 +1,3 @@
 # from galaxy
 - src: liangsuno.docker
+- src: geerlingguy.ansible-role-packer
