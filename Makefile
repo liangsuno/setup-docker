@@ -14,8 +14,35 @@ prepare: setup-docker
 # Commands
 ##########################################
 
-setup-ansible:
-	[ -f /usr/bin/ansible ] || sudo yum install ansible
+SHELL:=/bin/bash
+OS := $(shell lsb_release -si)
+OS_VERSION := $(shell lsb_release -sr)
+ANSIBLE_INSTALLED := $(shell [ -f /usr/bin/ansible ] && echo true)
+
+os:
+	$(info Performing System check ...)
+	$(info Detected OS=$(OS) version=$(OS_VERSION))
+        ifeq ($(ANSIBLE_INSTALLED),true)
+		$(info Detected ansible is already installed)
+        else
+		$(info Detected ansible is NOT installed)
+        endif
+	$(info System check completed.)
+
+setup-ansible: os
+        ifeq ($(OS),Ubuntu)
+                ifeq ($(ANSIBLE_INSTALLED),true)
+			$(info Ansible is already installed. Nothing to do here. Run "dpkg -l ansible" to check the version of Ansible installed)
+                else
+			sudo apt-get update
+			sudo apt-get install -y software-properties-common
+			sudo apt-add-repository -y ppa:ansible/ansible
+			sudo apt-get update
+			sudo apt-get install ansible
+                endif
+        else
+		[ -f /usr/bin/ansible ] || sudo yum install ansible
+        endif
 
 ping:
 	ansible all -i hosts -m ping
