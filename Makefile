@@ -29,7 +29,7 @@ os:
         endif
 	$(info System check completed.)
 
-setup-ansible: os
+install-ansible:
         ifeq ($(OS),Ubuntu)
                 ifeq ($(ANSIBLE_INSTALLED),true)
 			$(info Ansible is already installed. Nothing to do here. Run "dpkg -l ansible" to check the version of Ansible installed)
@@ -44,7 +44,11 @@ setup-ansible: os
 		[ -f /usr/bin/ansible ] || sudo yum install ansible
         endif
 
-ping:
+setup-ansible: os install-ansible ansible-ping
+
+ping: ansible-ping
+ansible-ping:
+	$(info Performing ansible ping check ...)
 	ansible all -i hosts -m ping
 
 setup-docker: setup-ansible
