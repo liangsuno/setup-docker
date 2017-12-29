@@ -10,6 +10,7 @@ How to use
 Run the following commands in Red Hat Linux or CentOS shell terminal.
 
     git clone https://github.com/liangsuno/setup-docker.git
+    cd setup-docker
     sudo yum install make
     make
 
